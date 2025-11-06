@@ -27,18 +27,18 @@ def upload():
     filepath = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(filepath)
 
-    # Process CSV
+    # Load CSV and process
     bids = pd.read_csv(filepath)
     bids['summary'] = bids['bid_text'].apply(summarize_bid)
     bids['score'] = bids.apply(score_bid, axis=1)
     top_bids = bids.sort_values(by='score', ascending=False).head(10)
 
-    # Generate report
+    # Generate PDF report
     report_filename = f"{os.path.splitext(file.filename)[0]}_report.pdf"
     report_path = os.path.join(REPORT_FOLDER, report_filename)
     generate_pdf(top_bids, report_path)
 
-    return render_template("index.html", report=report_path)
+    return render_template("index.html", report=f"/reports/{report_filename}")
 
 @app.route("/reports/<path:filename>")
 def download_report(filename):

@@ -1,7 +1,4 @@
 Flask
 pandas
 numpy
-torch
-transformers
-sentence-transformers
 reportlab
